@@ -1,0 +1,270 @@
+@import "tailwindcss";
+:root {
+  --btn-start: #3B82F6; /* blue-500 */
+  --btn-end: #2563EB; /* blue-600 */
+  --btn-text: #ffffff;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+
+  @apply bg-gray-50 text-gray-900;
+}
+
+#root {
+  @apply min-h-screen;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button,
+button[type="button"],
+button[type="submit"] {
+  /* Only apply the default blue styling to buttons that don't already set a background
+     (Tailwind utility classes like bg-* will include "bg-" in class attribute;
+     we avoid overriding those). Also exclude legacy .app-btn which keeps the old dark look. */
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+  outline: none;
+}
+
+/* Enhanced hyper-ultra blue button visuals + interactive animations
+   Targets only buttons that don't already have a 'bg-' utility or .app-btn
+*/
+button:not([class*="bg-"]):not(.app-btn) {
+  --g1: #3B82F6; /* blue-500 */
+  --g2: #2563EB; /* blue-600 */
+  --g3: #60A5FA; /* blue-400 highlight */
+  --glow: rgba(59,130,246,0.24);
+
+  appearance: none;
+  color: var(--btn-text);
+  background: linear-gradient(90deg, var(--g1) 0%, var(--g3) 35%, var(--g2) 100%);
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  border: 0;
+  box-shadow:
+    0 6px 22px rgba(37,99,235,0.16),
+    inset 0 -2px 8px rgba(255,255,255,0.06);
+  transform: translateZ(0);
+  border-radius: 12px;
+  padding: 0.65em 1.25em;
+  transition:
+    transform 220ms cubic-bezier(.2,.9,.2,1),
+    box-shadow 220ms cubic-bezier(.2,.9,.2,1),
+    background-position 420ms linear,
+    filter 220ms ease;
+  will-change: transform, box-shadow, background-position;
+  position: relative;
+  overflow: hidden;
+}
+
+/* animated gradient glide */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* subtle breathing glow */
+@keyframes buttonGlow {
+  0% { box-shadow: 0 6px 22px rgba(37,99,235,0.11); filter: brightness(1); }
+  50% { box-shadow: 0 14px 40px rgba(37,99,235,0.18); filter: brightness(1.04); }
+  100% { box-shadow: 0 6px 22px rgba(37,99,235,0.11); filter: brightness(1); }
+}
+
+/* sheen overlay for glossy effect */
+button:not([class*="bg-"]):not(.app-btn)::before {
+  content: "";
+  position: absolute;
+  left: -40%;
+  top: -50%;
+  width: 180%;
+  height: 200%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.06) 100%);
+  transform: rotate(25deg) translateX(0);
+  transition: transform 650ms cubic-bezier(.2,.9,.2,1), opacity 300ms;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* active ripple-ish pulse via pseudo-element when pressed */
+button:not([class*="bg-"]):not(.app-btn)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 30%),
+              radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 30%);
+  opacity: 0;
+  transition: opacity 240ms ease, transform 240ms ease;
+  pointer-events: none;
+}
+
+/* hover / focus / active interactions */
+button:not([class*="bg-"]):not(.app-btn):hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow:
+    0 18px 50px rgba(37,99,235,0.22),
+    inset 0 -2px 10px rgba(255,255,255,0.06);
+  background-position: 100% 50%;
+  animation: gradientShift 3.6s linear infinite, buttonGlow 3.8s ease-in-out infinite;
+}
+
+button:not([class*="bg-"]):not(.app-btn):active {
+  transform: translateY(-2px) scale(0.995);
+  box-shadow: 0 10px 30px rgba(37,99,235,0.18);
+  /* press pulse */
+  transition-duration: 120ms;
+  filter: brightness(0.98);
+  /* make sheen slide on active for tactile feel */
+  transform-origin: center;
+  outline: none;
+}
+button:not([class*="bg-"]):not(.app-btn):active::after {
+  opacity: 1;
+  transform: scale(0.98);
+}
+
+/* focus visible accessibility */
+button:not([class*="bg-"]):not(.app-btn):focus-visible {
+  box-shadow:
+    0 18px 50px rgba(37,99,235,0.20),
+    0 0 0 6px rgba(59,130,246,0.12);
+  outline: none;
+}
+
+/* sheen movement on hover */
+button:not([class*="bg-"]):not(.app-btn):hover::before {
+  transform: rotate(25deg) translateX(20%);
+  opacity: 1;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  button:not([class*="bg-"]):not(.app-btn) {
+    animation: none !important;
+    transition: none !important;
+  }
+  button:not([class*="bg-"]):not(.app-btn)::before,
+  button:not([class*="bg-"]):not(.app-btn)::after {
+    transition: none !important;
+  }
+}
+
+/* preserve earlier light-mode tweak */
+@media (prefers-color-scheme: light) {
+  button:not([class*="bg-"]):not(.app-btn) {
+    background: linear-gradient(90deg, #3B82F6 0%, #60A5FA 35%, #2563EB 100%);
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes breathing {
+  0% {
+    filter: blur(4px) brightness(1);
+    transform: scale(1);
+  }
+  50% {
+    filter: blur(5px) brightness(1.2);
+    transform: scale(1.02);
+  }
+  100% {
+    filter: blur(4px) brightness(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes labelPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes buttonPop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.97);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@layer components {
+  .tab-active {
+    @apply border-indigo-500 text-indigo-600;
+  }
+  
+  .tab-inactive {
+    @apply border-transparent text-gray-500 hover:text-gray-700;
+  }
+  
+  .stats-card {
+    @apply relative overflow-hidden rounded-xl bg-white p-6 shadow-lg transition-all duration-200;
+  }
+  
+  .stats-card::before {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-200;
+    background: radial-gradient(circle at 100% 100%, transparent 0%, rgba(99, 102, 241, 0.05) 100%);
+    content: "";
+  }
+  
+  .stats-card:hover::before {
+    @apply opacity-100;
+  }
+}
